@@ -1,0 +1,60 @@
+angular.module('WebUtils').factory('loggerService', function () {
+    return new function () {
+        var self = this;
+        self.loggerFacade = new LoggerFacade();
+        window.app.PubSub.loggerService = self;
+        
+        function initService() {
+            // Get loggers definitions and initialize the enabled loggers
+            var loggerDefinitions = window.loggerDefinitions;
+            for (var loggerDefinition in window.loggerDefinitions) {
+                var isLoggerEnabled = window.loggerDefinitions[loggerDefinition] == "true" ? true : false;
+
+                if (isLoggerEnabled) {
+                    var logger = null;
+                    switch (loggerDefinition) {
+                        case "ConsoleLogger":
+                            
+                            var logger = new ConsoleLogger({
+                                logPrefix: window.LogPrefix,
+                            });
+                            break;
+                        case "FileLogger":
+                            //Only use the file logger if we are not using pure web
+                            if (useConnector) {
+                                logger = new FileLogger({
+                                    logPrefix: window.LogPrefix,
+                                    MaxLogFileCount: MaxLogFileCount
+                                });
+                            }
+                            break;
+                        case "ServerLogger":
+                            logger = new ServerLogger({});
+                            break;
+                    }
+
+                    // add logger to loggers collection
+                    if (logger) {
+                        self.loggerFacade.AddLogger(logger);
+                    }
+                }
+            }
+
+            self.loggerFacade.Init();
+        };
+
+        // write function
+        self.WriteLine = function (message, severity, callerName) {
+            // Writing to logger
+            self.loggerFacade.WriteLine(message, severity, callerName);
+        };
+
+        // Set user name to know where the logging is comming from
+        self.SetUserName = function (userName) {
+            Logger.SetUserName(userName);
+        }
+
+        // Constructor
+        initService();
+    };
+});

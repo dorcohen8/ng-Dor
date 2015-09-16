@@ -1,0 +1,106 @@
+// Class that handles subscriptions to returning events from Ajax API and any other events
+angular.module('WebUtils')
+    .factory('eventServiceWrapper', ["loggerService", function (loggerService) {
+        return new function () {
+            
+            var self = this;
+
+		    self.subscriptions = [];
+
+            self.clearSubscriptions = function () {
+                self.subscriptions = [];
+            };
+
+            self.getSubscriptionsForEvent = function (event, ctx) {
+                var res = Enumerable.From(self.subscriptions).Where(function (x) {
+                    return x.event == event;
+                });
+
+                if (ctx) {
+                    res = res.Where(function (x) {
+                        return x.context == ctx;
+                    });
+                }
+
+                return res.ToArray();
+            };
+
+            self.subscribe = function (event, context, callback, priority) {
+                // Check the validity of the subscription
+                if (!event || !callback) { // || typeof callback != "function") {  <-- remove this check because IE8 passes functions as objects between related windows. Strange bug/by design. anyway, removing this check.
+                    throw ("Invalid parameters. Cannot initiate subscription. event: " + event);
+                }
+
+                // Create new guid to identify the subscription
+                var subscriptionId = getNewGuid();
+
+                // Saving the subscription
+                self.subscriptions.push({
+                    id: subscriptionId,
+                    event: event,
+                    context: context,
+                    callback: callback,
+                    priority: priority
+                });
+
+                // Returning identifier to subscription, should be used to unsubscribe from this event
+                return subscriptionId;
+            };
+
+            self.unsubscribe = function (subscriptionId) {
+                // Getting the subscription according to subscription id
+                var target = Enumerable.From(self.subscriptions).FirstOrDefault(null, function (x) {
+                    return x.id == subscriptionId;
+                });
+
+                if (!target) return;
+                // removing the subscription
+                self.subscriptions.remove(target);
+            };
+
+            self.publish = function (event, context, data) {
+                // Get all subscriptions to specific event and context and also subscriptions to the specific event without context
+                var targets = Enumerable.From(self.subscriptions).Where(function (x) {
+                    return x.event == event && (x.context == context || x.context == null);
+                }).OrderBy("$.priority").ToArray();
+
+                //To perform queue-like order, we rely on JS's "threading" system and put it in a timeout.
+                window.setTimeout(function () {
+                    // Publish the event with the data to all subscribers
+                    for (var i = 0; i < targets.length; i++) {
+                        try {
+                            targets[i].callback.apply(this, [].concat(data));
+                            //targets[i].callback(data);
+                        } catch (ex) {
+                            //do nothing. probably because popup window already closed
+                        }
+                    }
+                }, 10);
+
+            };
+
+            self.getSubscriptions = function() {
+                return self.subscriptions;
+            };
+            
+            self.NewEvent = function (eventName, severity, logMessage, parameters, context) {
+                // Creating the log message
+                if (logMessage === "undefined" || logMessage == null) {
+                    logMessage = eventName;
+                } else {
+                    logMessage = eventName + ": " + logMessage;
+                }
+
+                if (self.loggerService) {
+                    self.loggerService.WriteLine("NewEvent: " + logMessage, severity, "eventServiceWrapper");
+                }
+
+                // Checking if context is defined
+                if (context === undefined) {
+                    context = null;
+                }
+                // Publish the event being sent from Ajax API
+                self.publish(eventName, context, parameters);
+            };
+        };
+    }]);
