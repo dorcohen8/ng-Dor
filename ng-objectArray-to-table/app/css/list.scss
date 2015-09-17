@@ -1,0 +1,113 @@
+﻿// colors
+$basic-red: #ff0000;
+$odd-row: #191919;
+$even-row: #464646;
+$selected-row: #ff0000;
+$selected-red: #660000;
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+.List {
+    background-color: #2f2f2f;
+    color: whitesmoke;
+    position: absolute;
+    top: 115px;
+    width: 98%;
+    margin-left: 1%;
+    padding-left: 5px;
+    border: 3px solid $basic-red;
+
+    .listLength {
+        color: $basic-red;
+    }
+
+    .stringQuery {
+        span {
+            font-size: 18px;
+        }
+
+        input {
+            width: 300px;
+            margin-bottom: 15px;
+        }
+    }
+
+    .statusQuery {
+        display: flex;
+
+        .statusSelectLabel {
+            line-height: 50px;
+            margin-right: 5px;
+            font-size: 18px;
+        }
+
+        .statusMultiSelect {
+        }
+    }
+
+    .filterDay {
+        display: inline;
+
+        button {
+            width: 130px;
+            margin-right: 17px;
+        }
+
+        .selected {
+            background: $selected-red;
+        }
+    }
+
+    .ListTable {
+        thead {
+            th, tr {
+                border: 1px solid $basic-red;
+                padding: 8px 25px 8px 8px;
+                vertical-align: top;
+                font-weight: bold;
+                background-size: 24px 24px;
+
+                .sortable {
+                    background-repeat: no-repeat;
+                    background-position: center right;
+                    cursor: pointer;
+                    background-image: url(/app/images/ArrowUpDown.png);
+                }
+
+                .ascending {
+                    background-image: url(/app/images/ArrowDown.png);
+                }
+
+                .decending {
+                    background-image: url(/app/images/ArrowUp.png);
+                }
+            }
+        }
+
+        tbody {
+            th, tr {
+                border: 1px solid $basic-red;
+                vertical-align: top;
+                cursor: pointer;
+
+                td {
+                    padding: 8px;
+                }
+            }
+
+            .selected {
+                background-color: $selected-row !important;
+            }
+
+            tr:nth-child(even) {
+                background-color: $even-row;
+            }
+
+            tr:nth-child(odd) {
+                background-color: $odd-row;
+            }
+        }
+    }
+}

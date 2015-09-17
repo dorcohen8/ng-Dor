@@ -1,12 +1,14 @@
 {
-  "name": "RadlogicsSite",
+  "name": "SiteTemplate",
   "version": "1.0.0",
-  "description": "Radlogics Website",
+  "description": "SiteTemplate",
   "devDependencies": {
-    "del": "^2.0.1",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-rimraf": "^0.1.1",
     "gulp-sass": "^2.0.4",
-    "gulp-uglify": "^1.4.0"
+    "gulp-uglify": "^1.4.0",
+    "jshint-stylish": "^2.0.1"
   }
 }

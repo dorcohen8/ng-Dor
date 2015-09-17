@@ -1,72 +1,67 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head profile="http://gmpg.org/xfn/11">
+<head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="language" content="en">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title></title>
-    
-    <link rel="stylesheet" type="text/css" media="all" href="css/app.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="all" href="css/bootstrap-theme.min.css">
-    <script type="text/javascript" src="3rdParty/jquery-1.11.3.min.js"></script>
-    <script src="3rdParty/bootstrap.min.js"></script>
-    <script src="3rdParty/angular.min.js"></script>
-    <script type="text/javascript" src="app/app.min.js"></script>
+    <title>ObjectList</title>
+
+    <link rel="stylesheet" type="text/css" media="all" href="app/css/all.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="app/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="app/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="app/css/isteven-multi-select.css">
+
+    <script type="text/javascript">
+        // UA sniffing
+        window.device = {};
+
+        // older IE
+        window.device.is_ie = navigator.userAgent.match(/MSIE (\d{1,2})\.\d+?/);
+        // newer IE - 10+
+        if (window.device.is_ie === null) {
+            window.device.is_ie = navigator.userAgent.match(/Trident.+rv:(\d+)\.\d+/);
+        }
+
+        if (window.device.is_ie != null) {
+            window.device.is_ie = 'IE' + window.device.is_ie[1];
+        } else {
+            window.device.is_ie = false;
+        }
+
+        window.device.is_ios = Boolean(navigator.userAgent.match(/ipad|iphone/i));
+        window.device.is_webkit = Boolean(navigator.userAgent.match(/WebKit/));
+    </script>
 </head>
 
-<body ng-app="myapp" ng-controller="mainCtrl">
-    <header>
-        <nav>
-            <div>
+<body class="page page-id-91 page-template-default" ng-app="mainModule" ng-controller="mainCtrl">
+    <header class="bg-red">
+        <nav class="wrap">
+            <div class="block width-100">
                 <a href="#mobile-menu" class="mobile">Menu</a>
-                <a href="/#top" class="logo">MY APP</a>
+                <a href="/#top" class="logo"></a>
 
-                <ul id="menu-main-menu">
-                    <li><a href="#help-modal">Help</a></li>
+                <ul id="menu-main-menu" class="main">
+                    <li><a href ng-click="setMenuItem('List')" rel="overlay">List</a></li>
                     <li><a href="http://www.google.com">Contact</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <section>
-        <div class="list" ng-show="menuItem == 'List'">
-            <div>
-                <h3>List {{list.length}}</h3>
-                <label>
-                    Query:
-                    <input type="text" ng-model="queryString" value="" placeholder="Filter by">
-                </label>
-                <br>
+    <section ng-view></section>
 
-                <table class="ListTable" border="1">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th class="sortable" ng-click="sort(studies, 'Name')">Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in list | filter:queryString">
-                            <td>{{$index}}</td>
-                            <td>{{row.Name}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="demo" ng-show="menuItem == 'Demo'">            
-        </div>
-    </section>
+    <script type="text/javascript" src="3rdParty/jquery-1.11.3.min.js"></script>
+    <script>
+        var $ = jQuery;
+    </script>
 
-    <div id="help-modal" class="hidden">
-        <a class="close" href="#close">X</a>
-        <div>
-            <h3>Help</h3>
-        </div>
-    </div>
+    <script src="3rdParty/bootstrap.min.js"></script>
+    <script src="3rdParty/angular.min.js"></script>
+    <script src="3rdParty/angular-route.min.js"></script>
+    <script src="3rdParty/isteven-multi-select.js"></script>
+
+    <script type="text/javascript" src="app/js/all.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,1 @@
+var app = angular.module('mainModule', ['ngRoute', 'isteven-multi-select']);

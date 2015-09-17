@@ -1,0 +1,48 @@
+﻿<div class="List">
+    <div>
+        <h3>
+            List (<span class="listLength">{{filteredItems.length}}</span> items were retrieved)
+        </h3>
+        <div class="stringQuery">
+            <span>Query: </span>
+            <input type="text" ng-model="queryString" placeholder="Filter by">
+        </div>
+        <br />
+        <div class="statusQuery">
+            <div class="statusSelectLabel">
+                Filter by status:
+            </div>
+            <div class="statusMultiSelect"
+                 isteven-multi-select
+                 input-model="statusList"
+                 output-model="selectedStatusList"
+                 button-label="name"
+                 item-label="name maker"
+                 tick-property="ticked">
+            </div>
+        </div>
+        <br />
+        <div class="filterDay" ng-repeat="day in queryDays">
+            <button ng-class="{'selected': queryDay == day}" ng-click="getItems(day)">
+                {{day | daysFilter}}
+            </button>
+        </div>
+        <br />
+
+        <table class="ListTable" border="1">
+            <thead>
+                <tr>
+                    <th ng-repeat="header in itemsHeader" ng-click="sort(items, header)" class="sortable"
+                        ng-class="getSortDirectionClass(header)">{{header | capitalCaseToSpace}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in filteredItems = (items | filter:queryString | filter:filterByStatus)"
+                    ng-class="{'selected': itemId==row[UidFieldHeader]}"
+                    ng-click="selectItem(row)" ng-dblclick="">
+                    <td ng-repeat="header in itemsHeader">{{row[header]}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

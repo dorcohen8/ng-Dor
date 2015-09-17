@@ -3,50 +3,53 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var del = require('del');
 var sass = require('gulp-sass');
+var jshint = require('gulp-jshint');
+var rimraf = require('gulp-rimraf');
 
 var config = {
     //Include all js files but exclude any min.js files
-    src: ['app/**/*.js','!app/**/*.min.js']
+    src: ['app/js/**/*.js', '!app/js/**/*.min.js'],
+    jshint: ['app/js/**/*.js', '!app/js/study.js', '!app/js/**/*.min.js'],
+    scss: ['app/css/**/*.scss']
 }
 
-var scssconfig = {
-    //Include all js files but exclude any min.js files
-    src: ['css/**/*.scss']
-}
+gulp.task('clean', function () {
+    return gulp.src('app/js/all.min.js', { read: false }) // much faster 
+    .pipe(rimraf());
+});
 
-//delete the output file(s)
-gulp.task('clean', function (cb) {
-    //del is an async function and not a gulp plugin (just standard nodejs)
-    //It is important to pass in the callback function so del can
-    //  notify gulp when this task is complete.
-    //  Without the callback, gulp will attempt to proceed with the 
-    //  next task before the del function is actually done delete the files.
-    del(['app/app.min.js'], cb);
+gulp.task('jshint', function () {
+	return gulp.src(config.jshint)
+	.pipe(jshint())
+	.pipe(jshint.reporter('jshint-stylish'))
+	.pipe(jshint.reporter('fail'));
 });
 
 // Combine and minify all files from the app folder
-// This tasks depends on the clean task which means gulp will ensure that the 
-// Clean task is completed before running the scripts task.
-gulp.task('scripts', function () {
-    return gulp.src(config.src)
-      .pipe(uglify({ mangle: false }))
-      .pipe(concat('app.min.js'))
-      .pipe(gulp.dest('app/'));
-});
+gulp.task('scripts',['jshint'], function () {
+	return gulp.src(config.src)
+      // TODO: remove on production
+      //.pipe(uglify({ mangle: false }))
+      .pipe(concat('all.min.js'))
+      .pipe(gulp.dest('app/js/'));
+  });
 
 gulp.task('sass', function () {
-    gulp.src(scssconfig.src)
-        .pipe(sass({ outputStyle: 'compressed' }))
-        .pipe(concat('app.min.css'))
-        .pipe(gulp.dest('css'));
+	gulp.src(config.scss)
+	.pipe(sass({ outputStyle: 'compressed' }))
+	.pipe(concat('all.min.css'))
+	.pipe(gulp.dest('app/css/'));
+});
+
+gulp.task('default',['scripts','sass'], function () {
+	return gulp.watch(config.src, ['scripts']);
 });
 
 gulp.task('watch', function () {
-    return gulp.watch(config.src, ['scripts']);
+	return gulp.watch(config.src, ['scripts']);
 });
 
 gulp.task('watch-scss', function () {
-    return gulp.watch(scssconfig.src, ['sass']);
+	return gulp.watch(scssconfig.src, ['sass']);
 });

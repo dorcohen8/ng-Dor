@@ -1,7 +1,5 @@
 ﻿@charset "UTF-8";
 
-// sass --watch --style compressed "y:\my documents\web\RADLogics\review-app\css\style.scss":"y:\my documents\web\RADLogics\review-app\css\style.css"
-
 $buttons: "button, .button, .checkout-button, input[type=button], input[type=submit], input[type=reset]";
 $inputs: "input[type=date], input[type=datetime], input[type=datetime-local], input[type=email], input[type=month], input[type=number], input[type=password], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week], select, .select-box";
 
@@ -15,7 +13,7 @@ $purple: #6f3a96;
 $red: #ef3b33;
 $red-dark: #992e24;
 $yellow-1: #f8d21e;
-$yellow-2: #edbf1f;
+$yellow-hover-button: #edbf1f;
 $yellow-3: #fbf2d2;
 
 $text: #000;
@@ -29,7 +27,6 @@ $OpenSans-Regular: 'OpenSans-Regular', Arial, Helvetica, sans-serif;
 $OpenSans-Light: 'OpenSans-Light', Arial, Helvetica, sans-serif;
 
 $background-size: 600px;
-
 
 @mixin add-prefixes( $property, $value, $o: 'false', $ms: 'false' ) {
 	-moz-#{$property}: #{$value};
@@ -112,7 +109,6 @@ $background-size: 600px;
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=#{$ms},startColorstr='#{$color_top}', endColorstr='#{$color_bot}')";
 }
 
-
 // $fileName = filename, including path, with no extension
 @mixin webfont( $cssname, $filename ) {
     font-family: $cssname;
@@ -134,7 +130,6 @@ $background-size: 600px;
 @font-face {
 	@include webfont( "OpenSans-Light", "../fonts/OpenSans-Light-webfont" );
 }
-
 
 /* reset */
 html, body, div, span, applet, object, iframe,
@@ -357,7 +352,7 @@ big, .big {
 		}
 		
 		h3 {
-			color: $yellow-2;
+			color: $yellow-hover-button;
 			font-size: 1.75em;
 			line-height: 1em;
 		}
@@ -401,7 +396,7 @@ big, .big {
 	&:hover, &:active {
 		text-decoration: none;
 		background-color: $link-over;
-		color: $yellow-2;
+		color: $yellow-hover-button;
 	}
 	
 	&:disabled, &:disabled:hover {
@@ -611,15 +606,15 @@ header {
 				
 				&.menu-item-object-page {
 					&.current-menu-item, &.current_page_item, &.current-menu-ancestor {
-						border-color: $yellow-2;
+						border-color: $yellow-hover-button;
 						
 						& > a {
-							color: $yellow-2;
+							color: $yellow-hover-button;
 						}
 					}
 				}
 				&:hover {
-					border-color: $yellow-2;
+					border-color: $yellow-hover-button;
 					
 					.sub-menu {
 						display: block;
@@ -844,333 +839,7 @@ textarea {
 }
 
 
-// Review app specific
-.cornerstone-enabled-image{
-	-webkit-touch-callout:none;
-	-webkit-user-select:none;
-	-khtml-user-select:none;
-	-moz-user-select:none;
-	-ms-user-select:none;
-	user-select:none;
-	cursor:default;
-}
 
-
-#cornerstone, #report {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-}
-
-#cornerstone {
-	z-index: 10;
-	background: black;
-	color: white;
-	left: 0;
-	right: 60%;
-	overflow: hidden;
-	@include transition( right, .3s, 0s );
-	
-	&.maximized {
-		right: 0;
-	}
-	
-	// below from CS demo or ported from bootswatch
-	*, *:before, *:after {
-		box-sizing: border-box;
-	}
-	
-	.btn {
-		display: inline-block;
-		height: auto;
-		margin-bottom: 0;
-		font-weight: normal;
-		text-align: center;
-		vertical-align: middle;
-		cursor: pointer;
-		background-image: none;
-		border: 1px solid transparent;
-		white-space: nowrap;
-		padding: 5px 10px;
-		font-size: 12px;
-		line-height: 1.5;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-		
-		&:hover, &:focus {
-			color: #ffffff;
-   			text-decoration: none;
-		}
-		
-		&:focus, &:active:focus, &.active:focus {
-			outline: thin dotted;
-			outline: 5px auto -webkit-focus-ring-color;
-			outline-offset: -2px;
-		}
-		
-		&:active, &.active {
-			outline: 0;
-			background-image: none;
-			-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-			box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-		}
-	}
-
-	.btn-default {
-    	color: #ffffff;
-    	background-color: $link;
-	    border-color: $link;
-		
-		&:hover, &:focus, &:active, &.active {
-			color: $yellow-2;
-			background-color: $link-over;
-			border-color: $link-over;
-		}
-	}
-	
-	.btn-group {
-		display: inline-block;
-		vertical-align: middle;
-		margin-top: 3px;
-		
-		.btn {
-			float: left;
-			position: relative;
-			margin: 0;
-		}
-	}
-	
-	.button.maximize {
-		position: absolute;
-		right: -3px;
-		top: 0;
-		font-size: 2em;
-		line-height: 44px;
-		z-index: 10;
-	}
-	
-	/*
-	// remove for v. 0.8
-	.csthumbnail {
-        color: white;
-        background-color:black;
-        width:100px;
-        height:100px;
-        border: 0px;
-        padding: 0px;
-    }*/
-	
-	.imageViewer {
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 40px;
-		bottom: 0;
-	}
-	
-	.metadata {
-		position: absolute;
-		color: #e4ad00;
-		font-size: 14px;
-		margin: 10px;
-	}
-	
-	.main {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		bottom: 0;
-	}
-	
-	.studyContainer {
-		position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-		bottom: 0;
-    }
-	
-	/*
-	.thumbnails {
-        margin: 10px 0 10px 2px;
-		
-		a {
-			display: block;
-			width: 104px;
-			border: 2px solid black;
-			margin-bottom: 5px;
-			cursor: pointer;
-			
-			&:hover {
-				color: $red;
-				border-color: $red;
-			}
-			
-			&.active {
-				cursor: default;
-				color: $red-dark;
-				
-				&, &:hover {
-					border-color: $red-dark;
-				}
-			}
-			
-			img {
-				display: block;
-			}
-		}
-    }
-	
-	.thumbnailSelector {
-		position: absolute;
-		left: 0;
-        width:126px;
-		top: 0;
-		bottom: 0;
-		border-right: 2px solid #282828;
-		overflow: auto;
-    }*/
-	
-	.viewer {
-        position: absolute;
-        //left: 130px;
-		left: 0;
-		right: 3px;
-		top: 20px;
-		bottom: 0;
-    }
-	
-	.viewport {
-        width:100%;
-        height:100%;
-        top:0px;
-        left:0px;
-        position:absolute
-    }
-
-    #wrap {height:100%}
-	
-    
-}
-
-.demo {
-	position: absolute;
-	top: 125px;
-	left: 1%;
-	right: 1%;
-	bottom: 20px;
-	border: 3px solid $red;
-	
-	li {
-		list-style: none;
-		
-		&:before {
-			display: none;
-		}
-	}
-	
-	nav {
-		position: absolute;
-		right: -3px;
-        top: -43px;
-		
-		.button {
-			height: 40px;
-			line-height: 40px;
-			font-size: 1em;
-		}
-    }
-}
-
-#report {
-	left: 40%;
-	right: 0;
-	overflow: auto;
-	padding: 1.5em .75%;
-	
-	a {
-		&:hover {
-			img {
-				border-color: $red;
-			}
-		}
-		img {
-			border: 3px solid white;
-			@include transition( border-color, .2s, 0s );
-		}
-	}
-	
-	.approval {
-		background: $yellow-3;
-		margin-top: 1em;
-		padding: 8px 5px;
-	}
-	
-	.enlarge {
-		position: fixed;
-		padding: 2em;
-		
-		img {
-			display: block;
-		}
-	}
-	
-	fieldset {
-		position: relative;
-		border: 1px solid $gray-1;
-		padding: .5em 5px 1em;
-		margin: 0 0 1em;
-	}
-	
-	// approval checkboxes
-	label[for*="Approved"] {
-		color: $green;
-		margin-right: 3em;
-	}
-	label[for*="Rejected"] {
-		color: $red;
-	}
-	
-	input[type=text], select {
-		display: inline;
-		margin: 2px 3px;
-	}
-	input[type=text] {
-		width: 5em;
-	}
-	select {
-		width: auto;
-	}
-	
-	legend {
-		font-weight: bold;
-		background: white;
-		padding: 0 5px;
-	}
-	
-	ul {
-		li {
-			list-style: none;
-			margin-bottom: .5em;
-			font-family: $OpenSans-Regular;
-			
-			&:before {
-				content: "";
-				display: inline-block;
-				width: 6px;
-				height: 6px;
-				background: $red;
-				@include border-radius( 6px );
-				margin-left: -34px;
-				margin-right: 27px;
-				vertical-align: 3px;
-			}
-		}
-	}
-}
 
 .tooltip {
 	position: absolute;
@@ -1196,6 +865,9 @@ textarea {
 	background: none;
 }
 
+.canceAndBackButton{
+    margin-left:5px;
+}
 
 // special pages
 .iframed {
@@ -1205,18 +877,6 @@ textarea {
 		right: 0;
 		bottom: 0;
 		border: none;
-	}
-}
-
-
-// media queries
-@media (max-width: 1100px) {
-	// adjustments for ipad
-	
-	#cornerstone {
-		.btn {
-			padding: 5px 8px;
-		}
 	}
 }
 
@@ -1239,33 +899,6 @@ textarea {
 	
 	html, body {
 		overflow: auto;
-	}
-	
-	#cornerstone, #report {
-		position: relative;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		min-height: 400px;
-	}
-	
-	#cornerstone {
-		.button.maximize {
-			display: none;
-		}
-	}
-	
-	#demo {
-		margin-bottom: 20px;
-	}
-	
-	#report {
-		.enlarge {
-			position: absolute;
-			padding: 3em;
-			top: 0;
-		}
 	}
 }
 
